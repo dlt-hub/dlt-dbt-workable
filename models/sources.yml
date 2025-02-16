@@ -1,0 +1,180 @@
+version: 2
+sources:
+  - name: raw_data
+    schema: '{{ var ("source_dataset_name") }}'
+    tables:
+      - name: _dlt_loads
+      - name: candidates
+      - name: events
+      - name: jobs
+      - name: stages
+      - name: members
+      - name: jobs__locations
+      - name: events__members
+  - name: transformed_data
+    schema: '{{ var ("destination_dataset_name") }}'
+    tables:
+      - name: dlt_processed_load_ids
+
+models:
+      - name: dlt_processed_load_ids
+        description: "This table contains all processed load ids for incremental loading"
+      - name: _dlt_loads
+        description: "Created by DLT. Tracks completed loads"
+        columns:
+          - name: load_id
+            tests:
+              - not_null
+          - name: schema_name
+          - name: status
+            tests:
+              - not_null
+          - name: inserted_at
+            tests:
+              - not_null
+          - name: schema_version_hash
+      - name: candidates
+        columns:
+          - name: id
+            tests:
+              - not_null
+          - name: name
+          - name: firstname
+          - name: lastname
+          - name: headline
+          - name: account__subdomain
+          - name: account__name
+          - name: job__shortcode
+          - name: job__title
+          - name: stage
+          - name: disqualified
+          - name: sourced
+          - name: profile_url
+          - name: address
+          - name: phone
+          - name: email
+          - name: domain
+          - name: created_at
+          - name: updated_at
+          - name: _dlt_load_id
+            tests:
+              - not_null
+          - name: _dlt_id
+            tests:
+              - not_null
+              - unique
+          - name: hired_at
+      - name: events
+        columns:
+          - name: id
+          - name: title
+          - name: description
+          - name: type
+          - name: starts_at
+          - name: ends_at
+          - name: cancelled
+          - name: job__shortcode
+          - name: job__title
+          - name: candidate__id
+          - name: candidate__name
+          - name: _dlt_load_id
+            tests:
+              - not_null
+          - name: _dlt_id
+            tests:
+              - not_null
+              - unique
+      - name: jobs
+        columns:
+          - name: id
+          - name: title
+          - name: full_title
+          - name: shortcode
+          - name: code
+          - name: state
+          - name: sample
+          - name: url
+          - name: application_url
+          - name: shortlink
+          - name: location__location_str
+          - name: location__country
+          - name: location__country_code
+          - name: location__region_code
+          - name: location__city
+          - name: location__zip_code
+          - name: location__telecommuting
+          - name: location__workplace_type
+          - name: salary__salary_from
+          - name: salary__salary_to
+          - name: salary__salary_currency
+          - name: created_at
+          - name: _dlt_load_id
+            tests:
+              - not_null
+          - name: _dlt_id
+            tests:
+              - not_null
+              - unique
+          - name: location__region
+      - name: stages
+        columns:
+          - name: slug
+          - name: name
+          - name: kind
+          - name: position
+          - name: _dlt_load_id
+            tests:
+              - not_null
+          - name: _dlt_id
+            tests:
+              - not_null
+              - unique
+      - name: members
+        columns:
+          - name: id
+          - name: name
+          - name: email
+          - name: role
+          - name: active
+          - name: _dlt_load_id
+            tests:
+              - not_null
+          - name: _dlt_id
+            tests:
+              - not_null
+              - unique
+      - name: jobs__locations
+        columns:
+          - name: country_code
+          - name: country_name
+          - name: state_code
+          - name: zip_code
+          - name: city
+          - name: coords
+          - name: hidden
+          - name: _dlt_parent_id
+            tests:
+              - not_null
+          - name: _dlt_list_idx
+            tests:
+              - not_null
+          - name: _dlt_id
+            tests:
+              - not_null
+              - unique
+          - name: subregion
+      - name: events__members
+        columns:
+          - name: id
+          - name: name
+          - name: status
+          - name: _dlt_parent_id
+            tests:
+              - not_null
+          - name: _dlt_list_idx
+            tests:
+              - not_null
+          - name: _dlt_id
+            tests:
+              - not_null
+              - unique

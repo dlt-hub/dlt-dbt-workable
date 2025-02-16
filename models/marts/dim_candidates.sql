@@ -1,0 +1,30 @@
+/* Table: candidates */
+{{
+    config(
+        materialized='incremental'
+    )
+}}
+SELECT
+    t.id,
+    t.name,
+    t.firstname,
+    t.lastname,
+    t.headline,
+    t.account__subdomain,
+    t.account__name,
+    t.job__shortcode,
+    t.job__title,
+    t.stage,
+    t.disqualified,
+    t.sourced,
+    t.profile_url,
+    t.address,
+    t.phone,
+    t.email,
+    t.domain,
+    t.created_at,
+    t.updated_at,
+    t._dlt_load_id,
+    t._dlt_id,
+    t.hired_at,
+FROM  {{ ref('stg_candidates') }} as t
